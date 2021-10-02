@@ -1,0 +1,23 @@
+def main(u32 nb,u32 nw, u32[4] pubguess,private u32[4] privsoln, u32[4] pubsoln):
+	u32 nbb = 0
+    u32 nww= 0
+    u32[4] correct = [...0,4]
+    for u32 i in 0...4 do
+        if pubguess[i] == privsoln[i] then\
+            nbb=nbb+1 \
+            correct[i] = 1\
+        else\
+            nbb=nbb\
+        fi
+
+    for u32 j in 0...4 do
+        if correct[j]!=1 then \
+            for u32 k in 0...4 do
+                if correct[k] != 1 then \
+                    if privsoln[j] == pubguess[k] then nbb=nbb+1 else nbb=nbb fi \
+                else nbb=nbb fi \
+
+        fi
+        
+                 
+                    
