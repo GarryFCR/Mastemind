@@ -1,23 +1,36 @@
-def main(u32 nb,u32 nw, u32[4] pubguess,private u32[4] privsoln, u32[4] pubsoln):
-	u32 nbb = 0
-    u32 nww= 0
-    u32[4] correct = [...0,4]
-    for u32 i in 0...4 do
-        if pubguess[i] == privsoln[i] then\
-            nbb=nbb+1 \
-            correct[i] = 1\
-        else\
-            nbb=nbb\
-        fi
+import "hashes/sha256/512bitPacked" as sha256packed
 
-    for u32 j in 0...4 do
-        if correct[j]!=1 then \
-            for u32 k in 0...4 do
-                if correct[k] != 1 then \
-                    if privsoln[j] == pubguess[k] then nbb=nbb+1 else nbb=nbb fi \
-                else nbb=nbb fi \
+def loop(u32 i, field[4] privsoln,field[4] pubguess) -> u32:
+    u32 x=0
+    u32 position=0
+    for u32 j in 0..4 do
+        x=if pubguess[i]==privsoln[j] then j else 0 fi
+        position= if x!=0 then 4 else j fi
+    endfor
+    return position
 
-        fi
-        
-                 
-                    
+
+def main(field nb,field nw, field[4] pubguess,private field[4] privsoln, field[2] pubsoln):
+	field nbb = 0
+    field nww= 0
+    field[4] correct = [0,0,0,0]
+    for u32 i in 0..4 do
+        nbb =if (pubguess[i] == privsoln[i]) then nbb+1 else nbb fi
+        correct[i]=if (pubguess[i] == privsoln[i]) then 1 else 0 fi
+    endfor
+
+    u32 pos=0
+    for u32 i in 0..4 do
+        pos = if correct[i]!=0 then loop(i,privsoln,pubguess) else  0  fi
+        nww = if pos!=0 then nww+1 else nww fi
+        privsoln[i]=if pos!=0 then 0 else privsoln[i] fi
+    endfor
+
+    field[2] h = sha256packed(privsoln)
+    assert(h==pubsoln)
+    assert(nb==nbb)
+    assert(nw==nww)
+    
+    return
+    
+    
