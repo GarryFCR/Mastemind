@@ -1,0 +1,5 @@
+import "hashes/sha256/512bitPacked" as sha256packed
+
+def main(field[4] privsoln) -> field[2]:
+    field[2] h = sha256packed(privsoln)
+    return h

@@ -1,19 +1,20 @@
 import "hashes/sha256/512bitPacked" as sha256packed
 
-def loop(u32 i, field[4] privsoln,field[4] pubguess) -> u32:
+def loop(u32 i, field[4] privsoln,field[4] pubguess,field[4] correct) -> u32:
     u32 x=0
-    u32 position=0
+    
     for u32 j in 0..4 do
-        x=if pubguess[i]==privsoln[j] then j else 0 fi
-        position= if x!=0 then 4 else j fi
+        x=if pubguess[i]==privsoln[j] && correct[j] == 0  then j else 0 fi
+        j= if x!=0 then 4 else j fi
     endfor
-    return position
+    return x
 
 
 def main(field nb,field nw, field[4] pubguess,private field[4] privsoln, field[2] pubsoln):
 	field nbb = 0
     field nww= 0
     field[4] correct = [0,0,0,0]
+    field[4] privsoln_copy = privsoln
     for u32 i in 0..4 do
         nbb =if (pubguess[i] == privsoln[i]) then nbb+1 else nbb fi
         correct[i]=if (pubguess[i] == privsoln[i]) then 1 else 0 fi
@@ -21,9 +22,9 @@ def main(field nb,field nw, field[4] pubguess,private field[4] privsoln, field[2
 
     u32 pos=0
     for u32 i in 0..4 do
-        pos = if correct[i]!=0 then loop(i,privsoln,pubguess) else  0  fi
-        nww = if pos!=0 then nww+1 else nww fi
-        privsoln[i]=if pos!=0 then 0 else privsoln[i] fi
+        pos = if correct[i]==0 then loop(i,privsoln_copy,pubguess,correct) else  0  fi
+        nww = if pos!=0  then nww+1 else nww fi
+        privsoln_copy[pos]=if pos!=0 then 0 else privsoln_copy[pos] fi
     endfor
 
     field[2] h = sha256packed(privsoln)
