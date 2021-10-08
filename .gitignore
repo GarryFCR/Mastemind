@@ -1,2 +1,3 @@
 /out
 *.key
+/node_modules/*
