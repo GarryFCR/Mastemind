@@ -1,8 +1,9 @@
 const { initialize } = require('zokrates-js/node');
 const fs = require('fs-extra');
+const sizeof = require('object-sizeof');
 
-const file1 = "./program.xxx"
-const file2 ="./abi.json"
+const file_path = "./program.json"
+
 const source =  ` import "hashes/sha256/512bitPacked" as sha256packed
 
 def loop(u32 i, field[4] privsoln,field[4] pubguess,field[4] correct) -> u32:
@@ -46,19 +47,19 @@ def main(field nb,field nw, field[4] pubguess,private field[4] privsoln, field[2
 
 initialize().then((zokratesProvider) => {
     
-    const artifacts = zokratesProvider.compile(source);
-    
-    const program = artifacts.program
-    const abi = artifacts.abi
-    
-    fs.outputFile(file1, program, err => {
-        console.log(err)
-    })
+    const source1 = "def main(private field a) -> field: return a * a";
 
-    fs.outputFile(file2, abi, err => {
+    // compilation
+    const artifacts = zokratesProvider.compile(source);
+   // console.log(sizeof(artifacts))
+
+   
+
+    fs.outputFile(file_path, JSON.stringify(artifacts), err => {
         console.log(err)
     })
-    console.log(artifacts)
+   
+
 });
 
 
