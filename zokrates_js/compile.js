@@ -1,6 +1,7 @@
 const { initialize } = require('zokrates-js/node');
 const fs = require('fs-extra');
 const sizeof = require('object-sizeof');
+const json = require('big-json');
 
 const file_path = "./program.json"
 
@@ -51,14 +52,20 @@ initialize().then((zokratesProvider) => {
 
     // compilation
     const artifacts = zokratesProvider.compile(source);
-   // console.log(sizeof(artifacts))
+    //console.log(artifacts)
 
-   
+    const stringifyStream = json.createStringifyStream({
+        body: artifacts
+    });
 
-    fs.outputFile(file_path, JSON.stringify(artifacts), err => {
-        console.log(err)
-    })
-   
+
+    stringifyStream.on('data', function(strChunk) {       
+        fs.appendFileSync(file_path, strChunk);
+    });
+    
+    
+    
+    
 
 });
 

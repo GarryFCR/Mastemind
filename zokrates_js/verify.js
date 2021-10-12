@@ -14,6 +14,8 @@ initialize().then((zokratesProvider) => {
        abi : program.abi
     }
    console.log(artifacts)
+   const { witness, output } = zokratesProvider.computeWitness(artifacts, ["2"]);
+    console.log(witness)
 
    
 });
