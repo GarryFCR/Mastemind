@@ -2,7 +2,8 @@ const generate_witness =(pubGuess,privSoln)=>{
     var nw=0,nb=0;
     var correct=[0,0,0,0];
     var correct_colour=[0,0,0,0]
-   
+    var privSoln_copy = privSoln
+
     if (pubGuess.length !== 4 || privSoln.length !== 4){
         throw new Error("Invalid input")
     }
@@ -17,17 +18,17 @@ const generate_witness =(pubGuess,privSoln)=>{
     for(var j=0;j<4;j++){
         if (correct[j]==0){
             for (var k=0;k<4;k++){
-                if (pubGuess[j]==privSoln[k] && correct[k]==0){
+                if (pubGuess[j]==privSoln_copy[k] && correct[k]==0){
                     nw++
                     correct_colour[k]=1
-                    privSoln[k]=0
+                    privSoln_copy[k]=0
                 }
             }
         }
     }
 
    // console.log(correct,correct_colour)
-    return [nb,nw]
+    return [String(nb),String(nw)]
 }
 
 

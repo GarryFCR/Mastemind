@@ -1,6 +1,9 @@
 const { initialize } = require('zokrates-js/node');
+const input  =require('./input.json');
+const { generate_witness } = require('./witness.js')
+var args;
 
-const file_path = "./program.json"
+
 const source =  ` import "hashes/sha256/512bitPacked" as sha256packed
 
 def loop(u32 i, field[4] privsoln,field[4] pubguess,field[4] correct) -> u32:
@@ -38,19 +41,39 @@ def main(field nb,field nw, field[4] pubguess,private field[4] privsoln, field[2
     assert(nw==nww)
     
     return `
-    
+ 
+const hash =`import "hashes/sha256/512bitPacked" as sha256packed
+
+def main(field[4] privsoln) -> field[2]:
+    field[2] h = sha256packed(privsoln)
+    return h`
     
 
 
 initialize().then((zokratesProvider) => {
+
+    privSoln = input.Solution
+  
+    witness=generate_witness(input.Solution,["2","2","3","1"])
+    console.log(witness,privSoln,["2","2","3","1"])
+        
+    const artifacts_hash = zokratesProvider.compile(hash);
+    const { _ , output } = zokratesProvider.computeWitness(artifacts_hash, [privSoln]);
+    a = output.slice(11,50)
+    b = output.slice(58,97)
+    args = [witness[0],witness[1],["2","2","3","1"],privSoln,[a,b]]
+  
+});
+
+initialize().then((zokratesProvider) => {
+
     
+    console.log(args)
+
     // compilation
     const artifacts = zokratesProvider.compile(source);
-    console.log(artifacts)
-
-    args = ["2","1",["2","2","3","1"],["4","2","2","1"],["310423011697517752342144122183520459626","286330201638911841829125109109026029532"]]
-    const { witness, output } = zokratesProvider.computeWitness(artifacts,args );
-    console.log(witness)
+    const { witness, output } = zokratesProvider.computeWitness(artifacts,args);
+    console.log("Done:",output)
 
 
 
