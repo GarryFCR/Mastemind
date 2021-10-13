@@ -72,8 +72,13 @@ initialize().then((zokratesProvider) => {
 
     // compilation
     const artifacts = zokratesProvider.compile(source);
+    //computation
     const { witness, output } = zokratesProvider.computeWitness(artifacts,args);
     console.log("Done:",output)
+    // run setup
+    const keypair = zokratesProvider.setup(artifacts.program);
+    // generate proof
+    const proof = zokratesProvider.generateProof(artifacts.program, witness, keypair.pk);
 
 
 
