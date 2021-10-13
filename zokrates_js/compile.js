@@ -1,10 +1,6 @@
 const { initialize } = require('zokrates-js/node');
-const fs = require('fs-extra');
-const sizeof = require('object-sizeof');
-const json = require('big-json');
 
 const file_path = "./program.json"
-
 const source =  ` import "hashes/sha256/512bitPacked" as sha256packed
 
 def loop(u32 i, field[4] privsoln,field[4] pubguess,field[4] correct) -> u32:
@@ -48,24 +44,16 @@ def main(field nb,field nw, field[4] pubguess,private field[4] privsoln, field[2
 
 initialize().then((zokratesProvider) => {
     
-    const source1 = "def main(private field a) -> field: return a * a";
-
     // compilation
     const artifacts = zokratesProvider.compile(source);
-    //console.log(artifacts)
+    console.log(artifacts)
 
-    const stringifyStream = json.createStringifyStream({
-        body: artifacts
-    });
+    args = ["2","1",["2","2","3","1"],["4","2","2","1"],["310423011697517752342144122183520459626","286330201638911841829125109109026029532"]]
+    const { witness, output } = zokratesProvider.computeWitness(artifacts,args );
+    console.log(witness)
 
 
-    stringifyStream.on('data', function(strChunk) {       
-        fs.appendFileSync(file_path, strChunk);
-    });
-    
-    
-    
-    
+
 
 });
 
