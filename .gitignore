@@ -3,3 +3,5 @@
 /node_modules/*
 /cache/*
 /artifacts/*
+/proof.json
+/abi.json
