@@ -30,6 +30,7 @@ Inexact matches: 0 0 1 0 -> 1 white peg (not two, even though there are two red
 
 >>	Applied to the Mastermind board game, snarks could thereby prove that a clue about a secret combination of colours is correct, without revealing the secret itself.
 
-## The protocol
+## Resources
 
-We are gonna try to make this work by implementing the Zokrates which is a toolbox for Zk-SNARKs in Ethereum.
+* https://weijiek.medium.com/how-i-learned-zk-snarks-from-scratch-177a01c5514e
+* https://zokrates.github.io/introduction.html
