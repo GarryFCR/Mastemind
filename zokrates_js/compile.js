@@ -1,3 +1,5 @@
+//const   sizeof  = require('object-sizeof');
+const fs = require("fs");
 const { initialize } = require('zokrates-js/node');
 const input  =require('./input.json');
 const { generate_witness } = require('./witness.js')
@@ -55,7 +57,6 @@ initialize().then((zokratesProvider) => {
     privSoln = input.Solution
   
     witness=generate_witness(input.Solution,["2","2","3","1"])
-    console.log(witness,privSoln,["2","2","3","1"])
         
     const artifacts_hash = zokratesProvider.compile(hash);
     const { _ , output } = zokratesProvider.computeWitness(artifacts_hash, [privSoln]);
@@ -79,7 +80,18 @@ initialize().then((zokratesProvider) => {
     const keypair = zokratesProvider.setup(artifacts.program);
     // generate proof
     const proof = zokratesProvider.generateProof(artifacts.program, witness, keypair.pk);
+    
+    //console.log(sizeof(proof))
 
+    fs.writeFile('proof.json', JSON.stringify(proof), (err) => {
+    if (err) throw err;
+    });
+
+
+
+    if (zokratesProvider.verify(keypair.vk, proof)) {
+        console.log("Verified")
+    }
 
 
 
