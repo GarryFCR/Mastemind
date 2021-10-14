@@ -1,7 +1,7 @@
 //const   sizeof  = require('object-sizeof');
 const fs = require("fs");
 const { initialize } = require('zokrates-js/node');
-const input  =require('./input.json');
+const input  =require('./privsoln.json');
 const { generate_witness } = require('./witness.js')
 var args;
 
@@ -50,51 +50,49 @@ def main(field[4] privsoln) -> field[2]:
     field[2] h = sha256packed(privsoln)
     return h`
     
+const generate_proof=(guess)=>{
 
-
-initialize().then((zokratesProvider) => {
-
-    privSoln = input.Solution
-  
-    witness=generate_witness(input.Solution,["2","2","3","1"])
+    initialize().then((zokratesProvider) => {
         
-    const artifacts_hash = zokratesProvider.compile(hash);
-    const { _ , output } = zokratesProvider.computeWitness(artifacts_hash, [privSoln]);
-    a = output.slice(11,50)
-    b = output.slice(58,97)
-    args = [witness[0],witness[1],["2","2","3","1"],privSoln,[a,b]]
-  
-});
-
-initialize().then((zokratesProvider) => {
-
+        let pubGuess = guess.slice();
+        privSoln = input.Solution
     
-    console.log(args)
+        witness=generate_witness(input.Solution,pubGuess)
+            
+        const artifacts_hash = zokratesProvider.compile(hash);
+        const { _ , output } = zokratesProvider.computeWitness(artifacts_hash, [privSoln]);
+        a = output.slice(11,50)
+        b = output.slice(58,97)
 
-    // compilation
-    const artifacts = zokratesProvider.compile(source);
-    //computation
-    const { witness, output } = zokratesProvider.computeWitness(artifacts,args);
-    console.log("Done:",output)
-    // run setup
-    const keypair = zokratesProvider.setup(artifacts.program);
-    // generate proof
-    const proof = zokratesProvider.generateProof(artifacts.program, witness, keypair.pk);
+        args = [witness[0],witness[1],guess,privSoln,[a,b]]
+        //console.log(args)
     
-    //console.log(sizeof(proof))
+    });
+    
+    initialize().then((zokratesProvider) => {
 
-    fs.writeFile('proof.json', JSON.stringify(proof), (err) => {
-    if (err) throw err;
+        // compilation
+        const artifacts = zokratesProvider.compile(source);
+        //computation
+        const { witness, output } = zokratesProvider.computeWitness(artifacts,args);
+        console.log("Witness and Output computed...",output)
+        // run setup
+        const keypair = zokratesProvider.setup(artifacts.program);
+        // generate proof
+        const proof = zokratesProvider.generateProof(artifacts.program, witness, keypair.pk);
+        fs.writeFile('proof.json', JSON.stringify(proof), (err) => {
+        if (err) throw err;
+        else console.log("Proof generated...");
+        });
+/*
+        if (zokratesProvider.verify(keypair.vk, proof)) {
+            console.log("Verified")
+        }
+*/
     });
 
-
-
-    if (zokratesProvider.verify(keypair.vk, proof)) {
-        console.log("Verified")
-    }
-
-
-
-});
-
-
+}
+//generate_proof(["2","2","3","1"])
+module.exports={
+	generate_proof
+};
