@@ -1,18 +1,35 @@
-const { initialize } = require('zokrates-js/node');
-const { deployContract } = require('ethereum-waffle');
 const { expect } = require('chai');
-
+const { ethers } = require('hardhat');
 const fs = require("fs")
-const  proof  = require('../proof.json')
-const master = require("../artifacts/contracts/verifier.sol/Verifier.json");
 
-describe('Test the proof',()=>{
+describe('Verifier tests',()=>{
 	
-		it(' checks the verifier',async ()=>{
-            [owner, addr1, addr2, ...addrs] =  await ethers.getSigners();
-            contract_master = deployContract(owner, master,[]);
+		it('should return true when given correct input',async ()=>{
+
+            const Verifier = await ethers.getContractFactory('Verifier');
+            const verifier = await Verifier.deploy();
+           
             let proofx = JSON.parse(fs.readFileSync('./proof.json'))
-			expect(await contract_master.verifyTx.call(proofx.proof.a, proofx.proof.b, proofx.proof.c, proofx.inputs)
-            ).to.equal(true);
-			});
+            const result = await verifier.verifyTx(proofx.proof, proofx.inputs);
+            expect(result).equals(true);
+		});
+
+        it('should return false when given incorrect input', async () => {
+            const Verifier = await ethers.getContractFactory('Verifier');
+            const verifier = await Verifier.deploy();
+           
+        
+            let proofx = JSON.parse(fs.readFileSync('./proof.json'))
+            // Break input
+            proofx.proof.a = [
+              '0x0c6a0d84b75abf537af3686c38a9d0d73adaf3c555e7f44c4f3fa37c7b365b15',
+              '0x1e08a93f36aa7228b80a4b56fa952bc47aed36beb02a9f28f3c3f0dccdc25270',
+            ];
+            const result = await verifier.verifyTx(proofx.proof, proofx.inputs);
+            expect(result).equals(false);
+          }); 
+
+        
+
+
 })

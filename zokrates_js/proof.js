@@ -79,21 +79,28 @@ const generate_proof=(guess)=>{
         // run setup
         const keypair = zokratesProvider.setup(artifacts.program);
         // generate proof
-        const proof = await zokratesProvider.generateProof(artifacts.program, witness, keypair.pk);
+        const proof =  zokratesProvider.generateProof(artifacts.program, witness, keypair.pk);
         fs.writeFile('proof.json', JSON.stringify(proof), (err) => {
         if (err) throw err;
         else console.log("Proof generated...");
         });
 
-        if (await zokratesProvider.verify(keypair.vk, proof)) {
+        if ( zokratesProvider.verify(keypair.vk, proof)) {
             console.log("Proof is correct...")
         }
+
+        // export solidity verifier
+        const verifier = zokratesProvider.exportSolidityVerifier(keypair.vk, "v1");
+        fs.writeFile('contracts/verifier.sol', verifier, (err) => {
+            if (err) throw err;
+            else console.log("contract generated...");
+        });
 
     
     });
 
 }
-//generate_proof(["2","2","3","1"])
+generate_proof(["2","2","3","1"])
 module.exports={
 	generate_proof
 };
