@@ -75,7 +75,7 @@ const generate_proof=(guess)=>{
         const artifacts = zokratesProvider.compile(source);
         //computation
         const { witness, output } = zokratesProvider.computeWitness(artifacts,args);
-        console.log("Witness and Output computed...",output)
+        console.log("Witness and Output computed...")
         // run setup
         const keypair = zokratesProvider.setup(artifacts.program);
         // generate proof
@@ -90,12 +90,12 @@ const generate_proof=(guess)=>{
         }
 
         // export solidity verifier
-        const verifier = zokratesProvider.exportSolidityVerifier(keypair.vk, "v1");
+       /* const verifier = zokratesProvider.exportSolidityVerifier(keypair.vk, "v1");
         fs.writeFile('contracts/verifier.sol', verifier, (err) => {
             if (err) throw err;
             else console.log("contract generated...");
         });
-
+        */
     
     });
 
