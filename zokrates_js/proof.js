@@ -2,6 +2,8 @@
 const fs = require("fs");
 const { initialize } = require('zokrates-js/node');
 const input  =require('./privsoln.json');
+const data  =require('./pubGuess.json');
+const guess_data = data.Guess
 const { generate_witness } = require('./witness.js')
 var args;
 
@@ -51,7 +53,7 @@ def main(field[4] privsoln) -> field[2]:
     return h`
     
 const generate_proof=(guess)=>{
-
+    console.log(guess)
     initialize().then((zokratesProvider) => {
         
         let pubGuess = guess.slice();
@@ -73,6 +75,7 @@ const generate_proof=(guess)=>{
 
         // compilation
         const artifacts = zokratesProvider.compile(source);
+        console.log(args)
         //computation
         const { witness, output } = zokratesProvider.computeWitness(artifacts,args);
         console.log("Witness and Output computed...")
@@ -90,17 +93,22 @@ const generate_proof=(guess)=>{
         }
 
         // export solidity verifier
-       /* const verifier = zokratesProvider.exportSolidityVerifier(keypair.vk, "v1");
+        const verifier = zokratesProvider.exportSolidityVerifier(keypair.vk, "v1");
         fs.writeFile('contracts/verifier.sol', verifier, (err) => {
             if (err) throw err;
             else console.log("contract generated...");
         });
-        */
+        
     
     });
 
 }
-generate_proof(["2","2","3","1"])
+const proof=()=>{
+    generate_proof(guess_data)
+}
+
+generate_proof(["1","2","3","4"])
 module.exports={
-	generate_proof
+	generate_proof,
+    proof
 };

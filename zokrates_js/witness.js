@@ -27,7 +27,7 @@ const generate_witness =(pubGuess,privSoln)=>{
         }
     }
 
-   // console.log(correct,correct_colour)
+    //console.log(String(nb),String(nw))
     return [String(nb),String(nw)]
 }
 
