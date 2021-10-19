@@ -13,7 +13,7 @@ const verify= async ()=>{
                 console.log("Yesss")
             }
 }
-//verify()
+verify()
 module.exports={
 	verify
 };

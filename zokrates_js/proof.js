@@ -107,7 +107,9 @@ const proof=()=>{
     generate_proof(guess_data)
 }
 
-generate_proof(["1","2","3","4"])
+//generate_proof(["1","1","1","1"])
+
+
 module.exports={
 	generate_proof,
     proof

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-npx hardhat test
+
 
 # Enter the Guess [n1,n2,n3,n4]
 echo "Enter your guess"
@@ -18,3 +18,5 @@ echo "{\"Guess\":[\"$n1\",\"$n2\",\"$n3\",\"$n4\"]}" > ./zokrates_js/pubGuess.js
 node -e 'require("./zokrates_js/proof.js").proof()'
 
 node -e 'require("./zokrates_js/verify.js").verify()'
+
+npx hardhat test
