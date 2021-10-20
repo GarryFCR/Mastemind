@@ -3,7 +3,7 @@
 
 
 # Enter the Guess [n1,n2,n3,n4]
-echo "Enter your guess"
+echo "-----------------Enter your guess-----------------"
 read -p "Enter first number  : " n1
 read -p "Enter second number : " n2
 read -p "Enter third number  : " n3
@@ -13,10 +13,15 @@ echo "Your Guess - [$n1,$n2,$n3,$n4]"
 
 echo "{\"Guess\":[\"$n1\",\"$n2\",\"$n3\",\"$n4\"]}" > ./zokrates_js/pubGuess.json
 
-
-
+echo "--------------------------------------------------"
+echo "-----------------Generating proof-----------------"
 node -e 'require("./zokrates_js/proof.js").proof()'
-
+echo "--------------------------------------------------"
+npx hardhat compile
+echo "-----------------Veryfying------------------------"
 node -e 'require("./zokrates_js/verify.js").verify()'
+echo "--------------------------------------------------"
 
+echo "-----------------Testing--------------------------"
 npx hardhat test
+echo "--------------------------------------------------"

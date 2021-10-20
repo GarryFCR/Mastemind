@@ -8,12 +8,15 @@ const verify= async ()=>{
            
             let proofx = JSON.parse(fs.readFileSync('./proof.json'))
             const result = await verifier.verifyTx(proofx.proof, proofx.inputs);
-            console.log(result)
+            //console.log(result)
             if (result){
-                console.log("Yesss")
+                console.log("Proof verified")
+            }
+            else{
+                console.log("Proof incorrect") 
             }
 }
-verify()
+//verify()
 module.exports={
 	verify
 };

@@ -53,7 +53,7 @@ def main(field[4] privsoln) -> field[2]:
     return h`
     
 const generate_proof=(guess)=>{
-    console.log(guess)
+    //console.log(guess)
     initialize().then((zokratesProvider) => {
         
         let pubGuess = guess.slice();
@@ -75,7 +75,7 @@ const generate_proof=(guess)=>{
 
         // compilation
         const artifacts = zokratesProvider.compile(source);
-        console.log(args)
+        //console.log(args)
         //computation
         const { witness, output } = zokratesProvider.computeWitness(artifacts,args);
         console.log("Witness and Output computed...")
@@ -93,7 +93,7 @@ const generate_proof=(guess)=>{
         }
 
         // export solidity verifier
-        const verifier = zokratesProvider.exportSolidityVerifier(keypair.vk, "v1");
+       const verifier = zokratesProvider.exportSolidityVerifier(keypair.vk, "v1");
         fs.writeFile('contracts/verifier.sol', verifier, (err) => {
             if (err) throw err;
             else console.log("contract generated...");
@@ -109,7 +109,7 @@ const proof=()=>{
 
 //generate_proof(["1","1","1","1"])
 
-
+//proof()
 module.exports={
 	generate_proof,
     proof
