@@ -1,3 +1,6 @@
+/*calculate the number of white and black pegs
+*/
+
 const generate_witness =(pubGuess,privSoln)=>{
     var nw=0,nb=0;
     var correct=[0,0,0,0];
@@ -8,13 +11,14 @@ const generate_witness =(pubGuess,privSoln)=>{
         throw new Error("Invalid input")
     }
 
+    //count the number of guesses that are in place
     for(var i=0;i<4;i++){
         if (pubGuess[i]===privSoln[i]){
             correct[i]=1
             nb++;
         }
     }
-
+    //count the number of guesses that are not in place
     for(var j=0;j<4;j++){
         if (correct[j]==0){
             for (var k=0;k<4;k++){
@@ -27,7 +31,6 @@ const generate_witness =(pubGuess,privSoln)=>{
         }
     }
 
-    //console.log(String(nb),String(nw))
     return [String(nb),String(nw)]
 }
 

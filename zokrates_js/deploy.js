@@ -1,3 +1,4 @@
+//for deploying the contract to the frontend(unused for now)
 const fs = require('fs');
 
 

@@ -1,4 +1,7 @@
-//const   sizeof  = require('object-sizeof');
+/**
+a proof generation that uses zokrates.js  which includes compilation 
+of zok file,witness computation, proof generation and verifier contract generation.
+ */
 const fs = require("fs");
 const { initialize } = require('zokrates-js/node');
 const input  =require('./privsoln.json');
@@ -8,6 +11,7 @@ const { generate_witness } = require('./witness.js')
 var args;
 
 
+//instantiating the circuit used
 const source =  ` import "hashes/sha256/512bitPacked" as sha256packed
 
 def loop(u32 i, field[4] privsoln,field[4] pubguess,field[4] correct) -> u32:
@@ -46,29 +50,35 @@ def main(field nb,field nw, field[4] pubguess,private field[4] privsoln, field[2
     
     return `
  
+// instantiating the hash circuit
 const hash =`import "hashes/sha256/512bitPacked" as sha256packed
 
 def main(field[4] privsoln) -> field[2]:
     field[2] h = sha256packed(privsoln)
     return h`
     
+// generate the proof
+// first we generate the arguments by calling generate_witness() and generate the hash of privsoln
+
 const generate_proof=(guess)=>{
-    //console.log(guess)
+  
     initialize().then((zokratesProvider) => {
         
         let pubGuess = guess.slice();
         privSoln = input.Solution
     
+        //generate the number of black and white pegs
         witness=generate_witness(input.Solution,pubGuess)
-            
+        //compile     
         const artifacts_hash = zokratesProvider.compile(hash);
+        //compute hash
         const { _ , output } = zokratesProvider.computeWitness(artifacts_hash, [privSoln]);
+        //taking out the hash 128 bits at a time
         a = output.slice(11,50)
         b = output.slice(58,97)
-
+        //constructing the arguments array
         args = [witness[0],witness[1],guess,privSoln,[a,b]]
-        //console.log(args)
-    
+       
     });
     
     initialize().then((zokratesProvider) => {
@@ -83,11 +93,13 @@ const generate_proof=(guess)=>{
         const keypair = zokratesProvider.setup(artifacts.program);
         // generate proof
         const proof =  zokratesProvider.generateProof(artifacts.program, witness, keypair.pk);
+        //writing the proof into  json
         fs.writeFile('proof.json', JSON.stringify(proof), (err) => {
         if (err) throw err;
         else console.log("Proof generated...");
         });
 
+        //verify using the generated keypair and proof
         if ( zokratesProvider.verify(keypair.vk, proof)) {
             console.log("Proof is correct...")
         }
@@ -107,9 +119,7 @@ const proof=()=>{
     generate_proof(guess_data)
 }
 
-//generate_proof(["1","1","1","1"])
 
-//proof()
 module.exports={
 	generate_proof,
     proof

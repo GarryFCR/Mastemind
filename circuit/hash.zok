@@ -1,3 +1,4 @@
+//For generation of hashes related to the privsoln
 import "hashes/sha256/512bitPacked" as sha256packed
 
 def main(field[4] privsoln) -> field[2]:

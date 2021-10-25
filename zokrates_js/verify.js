@@ -1,6 +1,7 @@
 const { ethers } = require('hardhat');
 const fs = require("fs")
 
+//It uses the generated verifier contract to verify the proof
 const verify= async ()=>{
 
             const Verifier = await ethers.getContractFactory('Verifier');
@@ -16,7 +17,6 @@ const verify= async ()=>{
                 console.log("Proof incorrect") 
             }
 }
-//verify()
 module.exports={
 	verify
 };

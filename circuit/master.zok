@@ -1,5 +1,7 @@
 import "hashes/sha256/512bitPacked" as sha256packed
 
+//loop function that returns the position of the searched element from the corresponding 
+//privsoln
 def loop(u32 i, field[4] privsoln,field[4] pubguess,field[4] correct) -> u32:
     u32 x=0
     
@@ -8,7 +10,8 @@ def loop(u32 i, field[4] privsoln,field[4] pubguess,field[4] correct) -> u32:
     endfor
     return x
 
-
+//main function for asserting the number of white and black pegs provided and the calculated ones
+//it also asserts the public hash is equal to hash of the privsoln
 def main(field nb,field nw, field[4] pubguess,private field[4] privsoln, field[2] pubsoln):
 	field nbb = 0
     field nww= 0
