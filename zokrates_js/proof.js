@@ -35,7 +35,7 @@ def main(field nb,field nw, field[4] pubguess,private field[4] privsoln, field[2
         pos = if correct[i]==0 then loop(i,privsoln_copy,pubguess,correct) else  0  fi
         nww = if pos!=0  then nww+1 else nww fi
         x =if pos==0 then 1 else pos fi
-        privsoln_copy[x-1]=if pos==1 then privsoln[x-1] else 0 fi
+        privsoln_copy[x-1]=if pos==0 then privsoln[x-1] else 0 fi
     endfor
 
   
