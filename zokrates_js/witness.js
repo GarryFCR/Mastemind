@@ -1,4 +1,7 @@
-/*calculate the number of white and black pegs
+/*
+    calculate the number of white and black pegs
+    The number of white pegs represents correct colours in incorrect places.
+    The number of black pegs represnets correct colours in correct places.
 */
 
 const generate_witness =(pubGuess,privSoln)=>{
